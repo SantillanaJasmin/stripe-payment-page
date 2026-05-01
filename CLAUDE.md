@@ -14,6 +14,12 @@ docker compose build # Build all services defined in docker-compose.yml
 docker compose build <service> # Build a specific service
 ```
 
+If there are changes in `Gemfile`, run
+```bash
+docker compose exec web bundle install
+docker compose exec build web
+```
+
 ### Run the application
 ```bash
 docker compose up
