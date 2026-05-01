@@ -56,6 +56,8 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "foreman"
+
+  gem 'pry', '~> 0.16.0'
 end
 
 group :development do
@@ -67,4 +69,5 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  gem 'spinach', '~> 0.12.0'
 end
