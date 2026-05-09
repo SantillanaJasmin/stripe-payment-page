@@ -1,0 +1,67 @@
+- content_for :head do
+  script src="https://js.stripe.com/v3/"
+
+div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4"
+  div(class="w-full max-w-4xl"
+      data-controller="stripe-payment"
+      data-stripe-payment-publishable-key-value=@publishable_key
+      data-stripe-payment-client-secret-value=@client_secret
+      data-stripe-payment-line-items-total-value=@payment_link.line_items_total)
+
+    = form_with model: @payment_link,
+                url: confirm_online_payment_path(@payment_link.token),
+                html: { class: "flex flex-col md:flex-row gap-10 items-center justify-center" },
+                data: { action: "submit->stripe-payment#submit" } do |f|
+
+      div class="md:w-1/2 bg-white shadow-sm rounded-xl p-6 border border-gray-100"
+        h1 class="text-xl font-semibold text-gray-900 mb-5" Order Summary
+
+        div class="divide-y divide-gray-100"
+          - @line_items.each do |item|
+            div class="flex items-center justify-between py-3"
+              div
+                p class="text-sm font-medium text-gray-900" = item["name"]
+                p class="text-xs text-gray-500"
+                  | Qty #{item["quantity"]} &times; #{number_to_currency(item["amount"].to_i, unit: "A$")}
+              span class="text-sm font-medium text-gray-900"
+                = number_to_currency(item["amount"].to_i * item["quantity"].to_i, unit: "A$")
+
+        div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200"
+          span class="text-sm text-gray-600" Subtotal
+          span class="text-sm text-gray-900"
+            = number_to_currency(@payment_link.line_items_total, unit: "A$")
+
+        div(class="hidden flex justify-between items-center mt-2"
+            data-stripe-payment-target="surchargeSection")
+          span class="text-sm text-gray-600" Surcharge
+          span(class="text-sm text-gray-900"
+                data-stripe-payment-target="surchargeAmount")
+          = f.hidden_field :surcharge, data: { stripe_payment_target: "surchargeField" }
+
+        div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200"
+          span class="font-semibold text-gray-900" Total
+          span(class="text-lg font-bold text-gray-900"
+                data-stripe-payment-target="totalAmount")
+          = f.hidden_field :total_amount, data: { stripe_payment_target: "totalAmountField" }
+
+        = f.hidden_field :payment_method_id, data: { stripe_payment_target: "paymentMethodId" }
+
+      - if @payment_link.status == "paid"
+        div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4"
+          div class="w-full bg-white shadow-sm rounded-xl p-6 border border-gray-100"
+            div class="flex items-center justify-center w-14 h-14 rounded-full bg-green-100 mx-auto mb-4"
+              svg(class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24")
+                path(stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7")
+            h1 class="text-xl font-semibold text-gray-900 mb-2" Payment Already Received
+            p class="text-gray-500 text-sm"
+              | This payment link has already been paid.
+      - else
+        = turbo_frame_tag "payment-form" do
+          div class="w-full bg-white shadow-sm rounded-xl p-6 border border-gray-100"
+            h2 class="text-xl font-semibold text-gray-900 mb-5" Payment Details
+            div(class="mb-5" data-stripe-payment-target="paymentElement")
+            div(class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700"
+                data-stripe-payment-target="errors")
+            = f.submit "Pay #{number_to_currency(@payment_link.total_amount_paid, unit: 'A$')}",
+                      data: { stripe_payment_target: "submit" },
+                      class: "w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition-colors cursor-pointer"

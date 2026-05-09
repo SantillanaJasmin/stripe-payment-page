@@ -59,6 +59,8 @@ group :development, :test do
   gem "foreman"
 
   gem 'pry', '~> 0.16.0'
+  gem 'config', '~> 5.6', '>= 5.6.1'
+  gem 'slim-rails', '~> 4.0'
 end
 
 group :development do

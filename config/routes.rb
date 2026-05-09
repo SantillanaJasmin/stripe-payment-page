@@ -9,6 +9,6 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  get  "/pay/:token",         to: "online_payments#show",    as: :online_payment
+  post "/pay/:token/confirm", to: "online_payments#confirm", as: :confirm_online_payment
 end

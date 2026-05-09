@@ -8,13 +8,13 @@ scenario = ARGV[1]
 
 scenario_specs = [].tap do |arr|
   if scenario.present?
-    steps = feature.scenarios.detect { |scenario| scenario.name == scenario }
-    arr << scenario.steps.map { |step| "#{step.keyword} #{step.name}" }
+    steps = feature.scenarios.detect { |scen| scen.name == scenario }.try(:steps)
+    arr << steps.map { |step| "#{step.keyword} #{step.name}" }
   else
-    feature.scenarios.map do |scenario|
-      arr << scenario.steps.map { |step| "#{step.keyword} #{step.name}" }.join("\n")
+    feature.scenarios.map do |scen|
+      arr << scen.steps.map { |step| "#{step.keyword} #{step.name}" }.join("\n")
     end
   end
 end
 
-return scenario_specs.join("\n\n")
+print scenario_specs.join("\n\n")

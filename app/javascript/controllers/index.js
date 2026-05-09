@@ -6,3 +6,6 @@ import { application } from "./application"
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import StripePaymentController from "./stripe_payment_controller"
+application.register("stripe-payment", StripePaymentController)
