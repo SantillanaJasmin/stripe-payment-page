@@ -10,15 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_083750) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_02_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "payment_links", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.jsonb "line_items"
+    t.string "payment_intent_id"
     t.string "status"
+    t.decimal "surcharge", precision: 10, scale: 2, default: "0.0", null: false
     t.string "token"
+    t.decimal "total_amount_paid", precision: 10, scale: 2
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_payment_links_on_token", unique: true
   end

@@ -19,3 +19,9 @@ Feature: Valid credit card payment
     And I submitted the payment form
     And the card has been successfully charged with the indicated amount
     Then a confirmation page should be displayed
+  
+  Scenario: Revisit a paid payment link
+    Given I visit a payment link
+    And it has already been paid
+    Then a message should be displayed indicating it has been paid
+
