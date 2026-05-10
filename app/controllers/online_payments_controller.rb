@@ -4,6 +4,17 @@ class OnlinePaymentsController < ApplicationController
   def show
     @line_items = @payment_link.line_items
 
+    if @payment_link.paid?
+      @succeeded = true
+
+      respond_to do |format|
+        format.turbo_stream { render :confirm }
+        format.html
+      end
+  
+      return
+    end
+
     if @payment_link.payment_intent_id.present?
       payment_intent = Stripe::PaymentIntent.retrieve(@payment_link.payment_intent_id)
     else

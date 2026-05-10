@@ -12,6 +12,10 @@ class PaymentLink < ApplicationRecord
     line_items.sum { |item| item["amount"].to_i * item["quantity"].to_i }
   end
 
+  def paid?
+    status == "paid"
+  end
+
   private
 
   def set_total_amount_paid
