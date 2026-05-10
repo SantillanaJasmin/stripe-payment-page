@@ -41,8 +41,8 @@ div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4"
         div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200"
           span class="font-semibold text-gray-900" Total
           span(class="text-lg font-bold text-gray-900"
-                  data-stripe-payment-target="totalAmount")
-            = f.hidden_field :total_amount, data: { stripe_payment_target: "totalAmountField" }
+                data-stripe-payment-target="totalAmount")
+          = f.hidden_field :total_amount, data: { stripe_payment_target: "totalAmountField" }
 
         = f.hidden_field :payment_method_id, data: { stripe_payment_target: "paymentMethodId" }
 
