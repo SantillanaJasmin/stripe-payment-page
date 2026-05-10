@@ -23,7 +23,7 @@ docker compose restart web
 
 ### Run the application
 ```bash
-docker compose up
+docker compose start
 ```
 
 ### Database Operations
@@ -61,10 +61,20 @@ Surcharge is computed with the ff. matrix:
 Pre-built UI components that are used to capture card details 
 
 ### Payment Confirmation
-Payment processing is handled by `app/controllers/online_payments_controller.rb` -> `confirm` route.
+Payment processing is handled by [OnlinePaymentsController](app/controllers/online_payments_controller.rb) -> `confirm` route.
 
 ### Database
 The database config reads connection params from `DATABASE_HOST`, `DATABASE_USERNAME`, and `DATABASE_PASSWORD` env vars. Production uses four separate databases for primary, cache, queue, and cable connections.
 
+### Testing
+RSpec is the primary tool to test the endpoint behaviour in [OnlinePaymentsController](app/controllers/online_payments_controller.rb). SimpleCov is used to track the code coverage of the test code.
+```bash
+docker compose exec web bundle exec rspec spec
+```
+
 ### CI
 `bin/ci` runs: setup → RuboCop → bundler-audit → yarn audit → Brakeman → Rails tests → seed test. System tests are commented out but available via `bin/rails test:system`.
+
+## Known issues
+
+`Declined credit card` scenario from [invalid credit card payment specs](features/invalid_credit_card_payment.feature) is yet to be implemented;

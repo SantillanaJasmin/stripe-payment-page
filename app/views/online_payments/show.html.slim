@@ -46,7 +46,7 @@ div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4"
 
         = f.hidden_field :payment_method_id, data: { stripe_payment_target: "paymentMethodId" }
 
-      - if @payment_link.status == "paid"
+      - if @payment_link.paid?
         div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4"
           div class="w-full bg-white shadow-sm rounded-xl p-6 border border-gray-100"
             div class="flex items-center justify-center w-14 h-14 rounded-full bg-green-100 mx-auto mb-4"
